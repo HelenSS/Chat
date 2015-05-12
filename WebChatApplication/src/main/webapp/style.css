@@ -1,0 +1,55 @@
+body{
+  background-color: #f1eaff;
+}
+
+.heading{
+  position: absolute;
+  width: 20%;
+  left: 3%;
+  top: 0%;
+  color: #231d8b;
+}
+
+.messField
+{
+  position: absolute;
+  top: 2%;
+  left: 15%;
+  width: 60%;
+  color: #AB82FF;
+}
+
+.rectangle {
+  position: relative;
+  left: 3%;
+  width: 82%;
+  height: 450px;
+  overflow: auto;
+}
+
+.mess {
+  position: relative;
+  top: 2%;
+  width: 80%;
+  left: 20%;
+  color: #120639;
+  background-color: #C9F1FD;
+}
+
+.submit{
+  background-color: #8B51F5;
+  height: 40px;
+  width: 150px;
+}
+
+.editDel{
+  position: absolute;   
+  top: 30%;
+  left: 80%;
+}
+
+.rad
+{
+  position: absolute;
+  right: 10%
+}

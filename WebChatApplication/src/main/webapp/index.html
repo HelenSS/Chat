@@ -1,0 +1,37 @@
+﻿<body><!DOCTYPE html>
+	<html>
+		<head>
+  			<meta charset="utf-8">
+  			<title>Chat</title>
+ 			<link rel = "stylesheet" type="text/css" href="style.css">
+  			<script src="scripts.js"></script>
+		</head>
+		<body onload = "run();">
+  		<div class ="heading">
+   			<h1>
+    				<font size = "7" face = "Arial"><b>Chat</b></font>
+    			</h1>
+ 		</div>
+  		<section class = "chat">
+  			<div class = "rad">
+     				<p><input type="radio" id = "available" disabled> Server is available</p>
+     				<p><input type="radio" id = "unavailable" disabled> Server is unavailable</p>
+  			</div>
+  			<div class = "editDel">
+    				<input type="button" id = "delete" value="Delete message" class="submit" onClick = "delegateEvent(this)">
+     				<p>
+    					<input type="button" id = "edit" value="Edit message" class="submit" onClick = "delegateEvent(this)">
+    			</p></div>
+  			<div class ="messField">
+      				<input type = "text" id = "my name" size="20" maxlength = "50" placeholder="Enter your name" style = "background: #F2C9FB">
+  				<p>  
+    					<div class="rectangle" id = "rect"> 
+    					</div>   
+     					<textarea id = "my message" rows="5" cols = "100" style = "background: #DACAFB"  placeholder = "Enter your message"></textarea>
+    						<p>
+    							<input type="button" id = "send" class="submit" style="position: relative; left: 30%" value="Send" onClick = "delegateEvent(this)">
+    						</p>
+				</p>
+  			</div>
+  		</section>
+</body>
