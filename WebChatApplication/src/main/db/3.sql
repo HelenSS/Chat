@@ -1,0 +1,1 @@
+SELECT * FROM messages WHERE user_id = 1010 AND date = '2015-05-02';
