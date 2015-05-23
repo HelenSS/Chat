@@ -26,7 +26,7 @@ CREATE TABLE `messages` (
   `id` int(10) NOT NULL DEFAULT '0',
   `text` varchar(500) DEFAULT NULL,
   `user_id` int(10) DEFAULT NULL,
-  `date` varchar(20) DEFAULT NULL,
+  `date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
@@ -39,7 +39,7 @@ CREATE TABLE `messages` (
 
 LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-INSERT INTO `messages` VALUES (1,'I send to you 2 my pictures',47,'10.05.2015'),(2,'What is up?',85,'26.04.2015'),(5,'Thank you for your email',85,'02.05.2015'),(9,'Get my last email?',1010,'20.05.2015'),(11,'It is a lie',1010,'20.04.2015'),(18,'Me too',85,'12.05.2015'),(48,'I am fine, and you?',1010,'28.05.2015'),(1111,'Hallo',12,'20.04.2015'),(4141,'It does not make sense',2,'01.05.2015'),(489563,'I love talking about nothing. It is the only thing I know anything about',1,'03.05.2015');
+INSERT INTO `messages` VALUES (1,'I send to you 2 my pictures',47,'2015-05-02'),(2,'What is up?',85,'2015-04-24'),(5,'Thank you for your email',85,'2015-05-20'),(9,'Get my last email?',1010,'2015-04-20'),(11,'It is a lie',1010,'2015-05-02'),(18,'Me too',85,'2015-05-12'),(48,'I am fine, and you?',1010,'2015-04-28'),(1111,'Hallo',12,'2015-05-02'),(4141,'It does not make sense',2,'2015-05-03'),(489563,'I love talking about nothing. It is the only thing I know anything about',1,'2015-05-09');
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-17 15:35:37
+-- Dump completed on 2015-05-23 12:42:39
