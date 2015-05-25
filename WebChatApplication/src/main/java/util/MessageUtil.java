@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 public final class MessageUtil {
     public static final String TOKEN = "token";
     public static final String MESSAGES = "messages";
-    private static final String TN = "tn";
+    private static final String TE = "te";
     private static final String EN = "en";
     private static final String ID = "id";
     private static final String USER = "user";
@@ -19,7 +19,7 @@ public final class MessageUtil {
 
     public static String getToken(int index) {
         Integer number = index*8 + 11;
-        return TN + number + EN;
+        return TE + number + EN;
     }
 
     public static int getIndex(String token) {

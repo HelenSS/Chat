@@ -4,11 +4,13 @@ public class Message {
     private String id;
     private String user;
     private String messageText;
+    private transient String operation;
 
     public Message (String id, String user, String messageText) {
         this.id = id;
         this.user = user;
         this.messageText = messageText;
+        //this.operation = "post";
     }
 
     public String getId() {
@@ -35,7 +37,11 @@ public class Message {
         this.messageText = messageText;
     }
 
+    /*public void setOperation (String operation) {
+        this.operation = operation;
+    }*/
+
     public String toString() {
-        return "{\"id\":\"" + this.id + "\",\"user\":\"" + this.user + "\",\"messageText\":" + this.messageText + "}";
+        return "{\"id\":\"" + this.id + "\",\"user\":\"" + this.user + "\",\"messageText\":\"" + this.messageText + "\"}";
     }
 }

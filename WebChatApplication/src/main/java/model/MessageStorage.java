@@ -24,6 +24,25 @@ public final class MessageStorage {
         INSTANSE.addAll(messages);
     }
 
+    public static void putMessage (Message message) {
+        for (int i=0; i<INSTANSE.size(); i++) {
+            if (INSTANSE.get(i).getId().equals(message.getId())) {
+                INSTANSE.get(i).setMessageText(message.getMessageText());
+                return;
+            }
+        }
+    }
+
+    public static void deleteMessage (Message message) {
+        for (int i=0; i<INSTANSE.size(); i++) {
+            if (INSTANSE.get(i).getId().equals(message.getId())) {
+                INSTANSE.get(i).setMessageText("");
+                INSTANSE.get(i).setUser("");
+                return;
+            }
+        }
+    }
+
     public static int getSize() {
         return INSTANSE.size();
     }
@@ -32,12 +51,16 @@ public final class MessageStorage {
         return INSTANSE.subList(index, INSTANSE.size());
     }
 
-    public static Message getMessageById(String id) {
+    /*public static Message getMessageById(String id) {
         for (Message message : INSTANSE) {
             if (message.getId().equals(id)); {
                 return message;
             }
         }
         return null;
+    }*/
+
+    public static void cleanStorage() {
+        INSTANSE.clear();
     }
 }
