@@ -47,9 +47,8 @@ public class MessageServlet extends HttpServlet {
         logger.info ("Token " + token);
 
         if (token != null && !"".equals(token)) {
-            //int index = MessageUtil.getIndex(token);
-            int index = 0;
-            logger.info("Index " + index);
+            int index = MessageStorage.getIndex(token);
+            logger.info ("Index " + index);
             String messages = formResponse(index);
             response.setContentType(ServletUtil.APPLICATION_JSON);
             PrintWriter out = response.getWriter();
@@ -88,7 +87,7 @@ public class MessageServlet extends HttpServlet {
             JSONObject json = MessageUtil.stringToJson(data);
             Message message = MessageUtil.jsonToMessage(json);
             XMLHistoryUtil.updateData(message);
-            MessageStorage.putMessage(message);
+            MessageStorage.addMessage(message);
         } catch (ParseException | ParserConfigurationException | SAXException | TransformerException | XPathExpressionException e) {
             //logger.error(e);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -104,7 +103,7 @@ public class MessageServlet extends HttpServlet {
             JSONObject json = MessageUtil.stringToJson(data);
             Message message = MessageUtil.jsonToMessage(json);
             XMLHistoryUtil.deleteData(message);
-            MessageStorage.deleteMessage(message);
+            MessageStorage.addMessage(message);
         } catch (ParseException | ParserConfigurationException | SAXException | TransformerException | XPathExpressionException e) {
             //logger.error(e);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);

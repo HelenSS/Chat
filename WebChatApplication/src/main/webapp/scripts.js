@@ -15,7 +15,7 @@ var message = function(name, text, mess_id) {
 var appState = {
     mainUrl : 'chat',
     taskList:[],
-    token : 'TE11EN'
+    token : 'TE0EN'
 };
 
 function run() {

@@ -1,6 +1,7 @@
 package util;
 
 import model.Message;
+import model.MessageStorage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,7 +19,7 @@ public final class MessageUtil {
     }
 
     public static String getToken(int index) {
-        Integer number = index*8 + 11;
+        Integer number = MessageStorage.getSize();
         return TE + number + EN;
     }
 
