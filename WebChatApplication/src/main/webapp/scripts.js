@@ -1,19 +1,19 @@
 'use strict';
 
-var j = 0;
+var uniqueId = function() {
+    return Math.floor(Math.random() * 2147483647).toString();
+};
 
-var message = function(name, text) {
+var message = function(name, text, mess_id) {
     return {		
 	user: name,
 	messageText: text,
-	id: (j++).toString()
+	id: mess_id
     };
 };
 
-var messagesList = [];
-
 var appState = {
-    mainUrl : '/chat',
+    mainUrl : 'chat',
     taskList:[],
     token : 'TE11EN'
 };
@@ -22,8 +22,8 @@ function run() {
     document.getElementById("available").checked = true;
     var appContainer = document.getElementsByClassName('chat')[0];
     appContainer.addEventListener('click', delegateEvent);
-    restore();
-}
+    setInterval("restore()",1000);
+};
 
 var id;
 var ind;
@@ -31,111 +31,101 @@ var ed = false;
 
 function delegateEvent(evtObj) {
     if (evtObj.id === "send"){
-	if (evtObj.value === "Edit"){
+	if (evtObj.value === "edit"){
 	    replaceMessage (evtObj);
 	    return;
 	}
-    	sendMessage (evtObj);
+       sendMessage();
 	return;
     }
 
     if (evtObj.id === "delete"){
-    	deleteMessage (evtObj);
-	ed = false;
-	return;
+        var div = document.getElementById(ind);
+        if (document.getElementById('my name').value === div.getAttribute("user")) {
+            del(appState.mainUrl, JSON.stringify(message(div.getAttribute("user"), div.getAttribute("messageText"), ind)));
+        }
+	    ed = false;
+	    return;
     }
 
     if (evtObj.id === "edit" && ed===true){
-	editMessage (evtObj);
-	ed = false;
-	return;
+	    editMessage (evtObj);
+	    ed = false;
+	    return;
     }
 
     if (+evtObj.id || evtObj.id === "0"){
- 	id = evtObj.id;
-	ind = evtObj.id;
-	ed = true;
+ 	    id = evtObj.id;
+	    ind = evtObj.id;
+	    ed = true;
     }
 }
 
-function sendMessage (evtObj) {
+function sendMessage () {
     var name = document.getElementById ('my name').value;
-	
-    if (name === '')
-    	return;
-
     var messText = document.getElementById ('my message').value;
-
-    if (messText === '')
-    	return;
-
-    addMessage (name, messText);
+    if (name === '' || messText === '')
+        return;
+    post(appState.mainUrl, JSON.stringify(message (name, messText, uniqueId())));
     document.getElementById ('my message').value = '';
-}
-
-function addMessage (name, messText) {
-    var mess = message (name, messText);
-    createMessage(mess);
-    messagesList.push (mess);
-    post(appState.mainUrl, JSON.stringify(mess));
 }
 
 function createMessage (mess) {
     var newMess = document.createElement ("div");
     newMess.innerHTML = "<p><b>" + mess.user + "</b><p></p>" + mess.messageText + "</p>";
+    newMess.setAttribute("user", mess.user);
+    newMess.setAttribute("messageText", mess.messageText);
     newMess.setAttribute ("id", mess.id);
     newMess.setAttribute ("class", "mess");
     newMess.setAttribute ("onClick", "delegateEvent(this)");
     document.getElementById ("rect").appendChild (newMess);
-    messagesList[messagesList.length] = mess;
 
     var block = document.getElementById("rect");
     block.scrollTop = block.scrollHeight;
 }
 
 function deleteMessage (evtObj) {
-    var i;
-    for (i = 0; i<messagesList.length; i++)
-	if(messagesList[i].id == ind)
-	    if(messagesList[i].user != document.getElementById ('my name').value)
-		return;
-	    else
-		break;
+    var div = document.getElementById(ind);
+    if (document.getElementById('my name').value !== div.getAttribute("user"))
+        return;
+    var mess = message (div.getAttribute("user"), div.getAttribute("messageText"), div.getAttribute("id"));
     document.getElementById ("rect").removeChild(document.getElementById(ind));
-    del(appState.mainUrl, JSON.stringify(messagesList[i]));
-    messagesList.splice (ind, 1);
+    del(appState.mainUrl, JSON.stringify(mess));
 }
 
 function editMessage (evtObj) {
-    var i;
-    for (i = 0; i<messagesList.length; i++)
-	if(messagesList[i].id == ind)
-	    if(messagesList[i].user != document.getElementById ('my name').value)
-		return;
-	    else
-		break;
-
-    ind = i;
-    document.getElementById ("my message").value = messagesList[i].messageText;
-    document.getElementById ("send").value = "Edit";
+    var div = document.getElementById(ind);
+    if (document.getElementById('my name').value !== div.getAttribute("user"))
+        return;
+    document.getElementById ("my message").value = div.getAttribute("messageText");
+    document.getElementById ("send").value = "edit";
 }
 
 function replaceMessage (evtObj) {
     var newDiv = document.getElementById (id);
-    newDiv.value = document.getElementById ("my message").value;
-    newDiv.innerHTML = "<p><b>" + messagesList[ind].user + "</b><p></p>" + newDiv.value + "</p>";
-    var oldDiv = document.getElementById("rect").replaceChild(newDiv, document.getElementById (id));
+    newDiv.setAttribute("messageText", document.getElementById ("my message").value);
+    newDiv.innerHTML = "<p><b>" + newDiv.getAttribute("user") + "</b><p></p>" + newDiv.getAttribute("messageText") + "</p>";
+    var mess = message (newDiv.getAttribute("user"), newDiv.getAttribute("messageText"), newDiv.getAttribute("id"));
     document.getElementById ("send").value = "send";
     document.getElementById("my message").value = '';
-    messagesList[ind].messageText = newDiv.value;
-    put(appState.mainUrl, JSON.stringify(messagesList[ind]));
+    put(appState.mainUrl, JSON.stringify(mess));
 }
 
 function createAllMessages(allMessages) {
-    for(var i = 0; i<allMessages.length; i++)
-	createMessage(allMessages[i]);
-    if (allMessages.length)
-        j = allMessages.length;
+    var div;
+    for(var i = 0; i<allMessages.length; i++) {
+        div = document.getElementById(allMessages[i].id);
+        if (!div)
+            createMessage(allMessages[i]);
+        else if (div.getAttribute("messageText") === allMessages[i].messageText)
+            continue;
+        else if (allMessages[i].messageText === '')
+            document.getElementById ("rect").removeChild(document.getElementById(allMessages[i].id));
+        else {
+            div.setAttribute("messageText", allMessages[i].messageText);
+            div.innerHTML = "<p><b>" + allMessages[i].user + "</b><p></p>" + allMessages[i].messageText + "</p>";
+        }
+    }
 }
 
 function restore(continueWith) {
@@ -145,7 +135,7 @@ function restore(continueWith) {
     var response = JSON.parse(responseText);
     appState.token = response.token;
     if (response.messages)
-	createAllMessages(response.messages);
+	    createAllMessages(response.messages);
     continueWith && continueWith();
     });
 }
@@ -190,15 +180,19 @@ function ajax(method, url, data, continueWith, continueWithError) {
     xhr.open(method || 'GET', url, true);
 
     xhr.onload = function () {
-	if (xhr.readyState !== 4)
-	    return;
+	if (xhr.readyState !== 4) {
+        uncheked();
+        return;
+    }
 	if(xhr.status != 200) {
 	    continueWithError('Error on the server side, response ' + xhr.status);
+        uncheked();
 	    return;
 	}
 
 	if(isError(xhr.responseText)) {
 	    continueWithError('Error on the server side, response ' + xhr.responseText);
+        uncheked();
 	    return;
 	}
 	if(xhr.responseText) {
@@ -211,8 +205,7 @@ function ajax(method, url, data, continueWith, continueWithError) {
     }
 
     xhr.onerror = function (e) {
-	document.getElementById("available").checked = false;
-	document.getElementById("unavailable").checked = true;
+	uncheked();
 	var errMsg = 'Server connection error !\n'+
 	'\n' +
 	'Check if \n' +
@@ -223,4 +216,9 @@ function ajax(method, url, data, continueWith, continueWithError) {
     };
 
     xhr.send(data);
+}
+
+function uncheked() {
+    document.getElementById("available").checked = false;
+    document.getElementById("unavailable").checked = true;
 }
